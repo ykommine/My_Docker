@@ -10,6 +10,13 @@
 # @author        Kommineni, Yaswanth <Yaswanth.kommineni@harman.com>
 # @ingroup       Harman Docker
 #*****************************************************************
+if [ -z ${TOYOTA_DEPS} ];
+then
+    echo "ERROR: TOYOTA_DEPS export is mandatory";
+    exit -1
+else
+    echo "DEPS path: ${TOYOTA_DEPS}"
+fi
 
 BUILD_DIR=`pwd`
 DOCKER_IMAGE_NAME="dcm24_build_default"
@@ -23,6 +30,7 @@ then
 	exit -1
 fi
 
+START=$(echo "$TOYOTA_DEPS" | awk -v user=`whoami` '{split($0, parts, user); print parts[2]}' | awk -F'/My_Docker' '{print $1}')
 
 #Create docker image if it does not exist
 if [[ "$(docker images -q $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_VERSION 2> /dev/null)" == "" ]]; then
@@ -40,6 +48,6 @@ docker run -it --rm --init \
 	-v /usr/bin/p4:/bin/p4/ \
 	--workdir=$BUILD_DIR \
 	$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_VERSION \
-	bash -c "/root/My_Docker/login.sh `whoami` /root/My_Docker/"
+	bash -c "/root/$START/My_Docker/login.sh `whoami` /root/$START/My_Docker/"
 
 echo "*** End of Docker Image ***"
