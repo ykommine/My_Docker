@@ -1,0 +1,32 @@
+FROM ubuntu:18.04
+
+ARG USER_ID
+ARG GROUP_ID
+ARG USER_NAME
+
+RUN groupadd -g $GROUP_ID develop
+RUN useradd -m -u $USER_ID -g develop -d /root/ -s /bin/bash $USER_NAME && echo "$USER_NAME:$USER_NAME" | chpasswd
+RUN usermod -aG sudo $USER_NAME
+
+LABEL version="1.0"
+LABEL Description="DCM24 Build Environment 1"
+RUN apt-get update
+
+RUN apt-get install -y mtd-utils
+RUN apt-get install -y python-pip
+RUN apt-get install python-lzo
+RUN apt-get install -y git
+RUN apt-get install -y vim
+RUN apt-get install -y python3
+RUN apt-get install -y gawk wget git-core diffstat unzip texinfo gcc-multilib build-essential chrpath socat libsdl1.2-dev xterm
+RUN apt-get install libtinfo-dev
+RUN apt -y install libxml2-utils
+RUN pip install p4
+RUN apt-get install -y cpio p7zip-full rsync
+RUN apt-get install sudo
+RUN cpan Term::ReadKey
+RUN apt-get install libterm-readkey-perl
+RUN ln -sf /bin/bash /bin/sh
+
+
+
