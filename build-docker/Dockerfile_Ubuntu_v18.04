@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:mantic-20240530
 
 LABEL version="1.0"
 LABEL Description="DCM24 Build Environment 1"
